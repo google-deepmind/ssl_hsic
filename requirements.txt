@@ -1,0 +1,13 @@
+dm-acme==0.2.2
+dm-haiku==0.0.5
+dm-tree==0.1.6
+jax==0.2.25
+jaxlib==0.1.74
+jaxline==0.0.4
+ml-collections==0.1.0
+mpmath==1.2.1
+numpy==1.21.4
+optax==0.1.0
+tensorflow==2.7.0
+tensorflow-datasets==4.4.0
+git+https://github.com/deepmind/deepmind_research@2c7c401024c42c4fb1aa20a8b0471d2e6b480906#subdirectory=byol

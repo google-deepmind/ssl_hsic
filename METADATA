@@ -1,0 +1,81 @@
+# Format: google3/devtools/metadata/metadata.proto (go/google3metadata)
+
+name: "ssl_hsic"
+
+description: "Open source code for SSL-HSIC."
+
+third_party {
+  url {
+    type: PIPER
+    value: "http://google3/third_party/deepmind/ssl_hsic"
+  }
+}
+
+presubmit: {
+  path_expression: "//depot/google3/third_party/deepmind/ssl_hsic/..."
+
+  # Ensures that the string "do not submit" (in all caps) is not present.
+  check_do_not_submit: {
+    action: SUBMIT
+  }
+
+  # Lint
+  check_lint: {
+    action: SUBMIT
+    failure_status: ERROR
+  }
+
+  # Ensure author's username appears in copy.bara.sky.
+  check_presubmit_service: {
+    address: "blade:check-contents-author-presubmit-service-prod"
+    options: "file_path: 'google3/third_party/deepmind/ssl_hsic/copy.bara.sky'"
+    base: {
+      disable_tags: "SKIP_COPYBARA_AUTHOR_CHECK"
+    }
+  }
+
+  # Ensure that changes contain public notes for git commit messages.
+  check_description: {
+    required_regexp:
+      "("
+      "(^|\\n)\\s*BEGIN_PUBLIC\\s*?\\n"
+      "(.*\\n)*"
+      "\\s*\\S+.*(\\n.*)*\\n"
+      "\\s*END_PUBLIC\\s*?\\n"
+      "|"
+      "(^|\\n)\\s*PUBLIC:(?: )*\\S+"
+      ")"
+
+    failure_message:
+      "\n"
+      "CL descriptions for changes must contain public notes.\n"
+      "You can use either a single line or a block:\n"
+      "\n"
+      "PUBLIC: my public commit msg\n"
+      "\n"
+      "OR\n"
+      "\n"
+      "BEGIN_PUBLIC\n"
+      "my public\n"
+      "commit msg\n"
+      "END_PUBLIC\n"
+      "\n"
+      "If you're certain your change does not produce public changes, the\n"
+      "message can say 'Internal'.\n"
+  }
+}
+
+# Diff copybara changes, per http://go/copybara-service-config#diff-presubmit
+presubmit: {
+  path_regexp: "copy.bara.sky"
+  check_presubmit_service: {
+    base: { id: "CopybaraServiceDiff" }
+    action: REVIEW
+    include_deleted_files: true
+    include_all_opened_files: true
+    timeout: 120
+    failure_status: WARNING
+    address: "blade:copybara-diff-presubmit-service-prod"
+    options: "//depot/google3/third_party/deepmind/ssl_hsic/copy.bara.sky"
+  }
+}

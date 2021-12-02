@@ -1,0 +1,58 @@
+"""Copybara configuration for ssl_hsic.
+
+To migrate code to a local directory, run:
+
+  copybara third_party/deepmind/ssl_hsic/copy.bara.sky \
+  local ../ --folder-dir=/some/path/for/ssl_hsic
+
+To push it to the Git-on-Borg repository:
+  copybara third_party/deepmind/ssl_hsic/copy.bara.sky git ../
+
+Note: the first time you run the command above, you'll need to add --force so
+that the repository history can be initialized.
+"""
+
+load(
+    "//learning/deepmind/opensource/staging/common",
+    "fix_py_imports_if_present",
+    "make_migration_workflows",
+)
+
+project_name = "ssl_hsic"
+
+# List of authors whose names are allowed to appear in Git commit history.
+project_authors = {
+    "yazhe": "Yazhe Li <yazhe@google.com>",
+}
+
+# List of patterns of paths to be released.
+project_included_files = [
+    "google3/third_party/deepmind/" + project_name + "/**",
+]
+
+# List of patterns of paths to be excluded from release.
+project_excluded_files = [
+    "**/BUILD",
+]
+
+# List of code transformations to perform when migrating.
+project_transforms = [
+    core.move("google3/third_party/deepmind/" + project_name,
+              ""),
+    fix_py_imports_if_present(project_name),
+]
+
+# List of additional checks to perform when migrating.
+project_checks = []
+
+# This defines the code migration workflows.
+make_migration_workflows(
+    project_name=project_name,
+    project_authors=project_authors,
+    project_included_files=project_included_files,
+    project_excluded_files=project_excluded_files,
+    project_transforms=project_transforms,
+    project_checks=project_checks,
+    insert_copyright_headers=False,
+    include_licensing_files=False,
+)
